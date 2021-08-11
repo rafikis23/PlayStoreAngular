@@ -14,9 +14,25 @@ export class AppComponent {
   faPlus = faPlus;
   faPaperPlane = faPaperPlane;
   detalleApp: any = [];
+  iconos:any = [];
+  usuarios:any = ['Pedro', 'Messi', 'Cristiano', 'Maria', 'Juana', 'Lesli', 'Alaska'];
+  iconoSeleccionado: string = '';
+  usuarioSeleccionado: string = '';
+  rutaIcono: string = '';
   categorias:any =[];
   aplicaciones:any = [];
   categoriaSeleccionada:any;
+  nombreApp: string = '';
+  descripcionApp: string = '';
+  desarrolladorApp: string = '';
+  precioApp: Number = 0;
+  descargasApp: Number = 0;
+  calificacionApp: Number = 0;
+  nuevoComentario:  String = '';
+  fecha: String = '';
+  calificacion: Number = 0;
+  aplicacionSeleccionada: any;
+
   constructor( 
     private categoriaService:CategoriaService,
     private modalService: NgbModal
@@ -31,6 +47,8 @@ export class AppComponent {
           console.log(error);
         }
       )
+      
+      
     }
     seleccionarCategoria(){
       console.log(this.categoriaSeleccionada)
@@ -45,7 +63,75 @@ export class AppComponent {
 
       )
     }
+    visualizarImagen(){
+      
+    }
+    visualizarUsuario(){
+
+    }
+    guardarApp(){
+      this.rutaIcono = `img/app-icons/${this.iconoSeleccionado}.webp`
+      const data = {
+        nombre : this.nombreApp,
+        descripcion: this.descripcionApp,
+        icono: this.rutaIcono,
+        calificacion: this.calificacionApp,
+        descargas: this.descargasApp,
+        precio: this.precioApp,
+        desarrollador: this.desarrolladorApp
+      }
+      console.log(data);
+      this.categoriaService.guardarAplicacion(this.categoriaSeleccionada, data).subscribe(
+        res=>{
+          console.log(res);
+          if(res.ok === 1){
+            this.modalService.dismissAll();
+          }
+        },
+        error=> console.log(error)
+      );
+
+    }
+    guardarComentario(){
+      /* console.log(this.calificacion);
+      console.log(this.categoriaSeleccionada);
+      console.log(this.aplicacionSeleccionada);
+      console.log(this.nuevoComentario);
+      console.log(this.usuarioSeleccionado);
+      console.log(this.fecha); */
+      const data = {
+        comentario: this.nuevoComentario,
+        calificacion: this.calificacion,
+        fecha: this.fecha,
+        usuario: this.usuarioSeleccionado
+      }
+      this.categoriaService.guardarComentario(this.categoriaSeleccionada, this.aplicacionSeleccionada, data).subscribe(
+        res=>{
+          console.log(res);
+          if(res.ok === 1){
+            this.modalService.dismissAll();
+          }
+        },
+        error=> console.log(error)
+      );
+    }
+    nuevaApp(modal){
+      this.iconos = [];
+      for(let i=1; i<=50; i++){
+        this.iconos.push(i);
+       
+      }
+      console.log(this.iconos);
+      this.modalService.open(
+        modal,
+        {
+          size:'md'
+        }
+      )
+
+    }
     detalleAplicacion(modal, idAplicacion){
+      this.aplicacionSeleccionada = idAplicacion;
       console.log('La id aplicacion es',idAplicacion);
       console.log('La id Categoria es', this.categoriaSeleccionada);
       this.categoriaService.obtenerDetalleApp(this.categoriaSeleccionada, idAplicacion).subscribe(

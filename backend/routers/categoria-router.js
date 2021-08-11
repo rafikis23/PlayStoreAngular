@@ -77,7 +77,7 @@ router.post('/:idCategoria/aplicaciones/:idAplicacion/comentario', function(req,
     });
 })
 
-//Agregar una nueva aplicacion
+//Agregar una nueva Categoria
 router.post('/categoria', function(req, res){
     let c = new categoria({
         _id: mongoose.Types.ObjectId(),
@@ -95,6 +95,40 @@ router.post('/categoria', function(req, res){
             res.end();
         })
 });
+// Agregar una nueva aplicacion
+router.post('/:idCategoria/aplicacion', function(req, res){
+    categoria.update(
+        {
+            _id: mongoose.Types.ObjectId(req.params.idCategoria),
+        },
+        {
+            $push:{
+                aplicaciones:{
+                    _id: mongoose.Types.ObjectId(),
+                    nombre: req.body.nombre,
+                    descripcion: req.body.descripcion,
+                    icono: req.body.icono,
+                    instalada: false,
+                    app: "app/demo.apk",
+                    calificacion: req.body.calificacion,
+                    descargas: req.body.descargas,
+                    precio: req.body.precio,
+                    desarrollador: req.body.desarrollador,
+                    imagenes: [],
+                    comentarios: []
 
+                }
+            }
+        }
+    )
+    .then(data=>{
+        res.send(data);
+        res.end();
+    })
+    .catch(error=>{
+        res.send(error);
+        res.end();
+    });
+})
 
 module.exports = router;

@@ -7,7 +7,7 @@
   
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <form class="form-inline my-2 my-lg-0 ml-auto">
-        <button type="button" class="btn btn-success my-2 my-sm-0" data-toggle="modal" data-target="#modal-nueva-app">Nueva aplicación <fa-icon [icon]="faPlus"></fa-icon></button>
+        <button type="button" class="btn btn-success my-2 my-sm-0" (click)="nuevaApp(contentNuevaApp)">Nueva aplicación <fa-icon [icon]="faPlus"></fa-icon></button>
       </form>
   </div>
   </nav>
@@ -15,8 +15,8 @@
   <main role="main" class="container starter-template">
           <div class="row">
               <div class="col-12">
-                  <select [(ngModel)]="categoriaSeleccionada" (change)="seleccionarCategoria();" class="form-control" id="categoria" style="font-size: 1.9rem;">
-                      <option>- Seleccione una categoria -</option>
+                  <select  [(ngModel)]="categoriaSeleccionada" (change)="seleccionarCategoria();" class="form-control" id="categoria" style="font-size: 1.9rem;">
+                      <option >- Seleccione una categoria -</option>
                       <option *ngFor="let categoria of categorias" [ngValue]="categoria._id">{{categoria.nombreCategoria}}</option>
 
                   </select>
@@ -170,10 +170,19 @@
     <!--Formulario nuevo comentario-->
     <div class="row">
         <div class="col-10">
-          <input class="form-control" type="text" id="nuevoComentario" placeholder="Nuevo comentario">
+          <form>
+          <select [(ngModel)]="usuarioSeleccionado" class="form-control" name="usuario" id="usuario" (change)="visualizarUsuario()">
+            <option>- Seleccione un usuario-</option>
+            <option *ngFor="let usuario of usuarios" [ngValue]="usuario">{{usuario}}</option>
+          </select>
+          <input [(ngModel)]="nuevoComentario" [ngModelOptions]="{standalone: true}" class="form-control" type="text" id="nuevoComentario" placeholder="Nuevo comentario">
+          <input [(ngModel)]="fecha" [ngModelOptions]="{standalone: true}" class="form-control" type="date" id="fecha" placeholder="Fecha">
+          <input [(ngModel)]="calificacion" [ngModelOptions]="{standalone: true}" class="form-control" type="number" id="calificacion" placeholder="Calificación">
+        </form>
         </div>
+        
         <div class="col-2">
-          <button type="button" class="btn btn-success"> <fa-icon [icon]="faPaperPlane"></fa-icon></button>
+          <button type="button" class="btn btn-success" (click)="guardarComentario()"> <fa-icon [icon]="faPaperPlane"></fa-icon></button>
         </div>
       </div>
   </div>
@@ -213,4 +222,38 @@
   </div>
 </div>
 </div> -->
+<ng-template #contentNuevaApp let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Nueva Aplicación</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-4">
+        <img id="formImagenApp" class="img-fluid" src="../assets/img/app-icons/{{iconoSeleccionado}}.webp">
+      </div>
+      <div class="col-8">
+        <form id="form-app">
+          Icono:
+          <select [(ngModel)]="iconoSeleccionado" class="form-control" name="icono" id="icono" (change)="visualizarImagen()">
+            <option>- Seleccione un icono-</option>
+            <option *ngFor="let icono of iconos" [ngValue]="icono">{{icono}}.webp</option>
+          </select>
+          <input [(ngModel)]="nombreApp" [ngModelOptions]="{standalone: true}" class="form-control" type="text" name="nombre" id="nombre" placeholder="Nombre aplicación">
+          <textarea [(ngModel)]="descripcionApp" [ngModelOptions]="{standalone: true}" class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Descripción"></textarea>
+          <input [(ngModel)]="desarrolladorApp" [ngModelOptions]="{standalone: true}" class="form-control" type="text" name="desarrollador" id="desarrollador" placeholder="Desarrollador">
+          Precio: <input [(ngModel)]="precioApp" [ngModelOptions]="{standalone: true}" class="form-control" type="number" name="precio" id="precio" placeholder="Precio">
+          Descargas: <input [(ngModel)]="descargasApp" [ngModelOptions]="{standalone: true}" class="form-control" type="number" name="descargas" id="descargas" placeholder="Descargas">
+          Calificacion: <input [(ngModel)]="calificacionApp" [ngModelOptions]="{standalone: true}"class="form-control" type="number" name="calificacion" id="calificacion" placeholder="Calificacion">
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cerrar</button>
+        <button type="button" class="btn btn-success" (click)="guardarApp()">Guardar</button>
+  </div>
+</ng-template>
 

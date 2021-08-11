@@ -32,6 +32,20 @@ export class CategoriaService {
        });
     
   }
+  guardarAplicacion(idCategoria, data):Observable<any> {
+    return this.httpClient.post(
+      `http://localhost:8888/categorias/${idCategoria}/aplicacion`,
+      {
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+        icono: data.icono,
+        calificacion: data.calificacion,
+        descargas: data.descargas,
+        precio: data.precio,
+        desarrollador: data.desarrollador
+      }
+    );
+  }
   guardarCategoria(data):Observable <any>{
     return this.httpClient.post(
       'http://localhost:8888/categorias/categoria',
